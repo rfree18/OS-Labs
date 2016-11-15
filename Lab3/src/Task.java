@@ -32,6 +32,7 @@ public class Task {
         activities = new ArrayList<>();
         resourceHas = new HashMap<>();
         resourceNeeds = new HashMap<>();
+        resourceClaim = new HashMap<>();
         status = Status.RUNNING;
     }
 

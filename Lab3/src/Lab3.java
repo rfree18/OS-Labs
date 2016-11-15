@@ -36,6 +36,9 @@ public class Lab3 {
             FIFO fifo = new FIFO();
             fifo.run();
 
+            Banker banker = new Banker();
+            banker.run();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

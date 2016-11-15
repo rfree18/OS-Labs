@@ -8,12 +8,14 @@ public class Resource {
     int resourceNum;
 
     int unitsToProcess;
+    int totalClaim;
 
     static ArrayList<Resource> resources;
 
     private Resource(int units) {
         unitsLeft = units;
         unitsToProcess = 0;
+        totalClaim = 0;
     }
 
     public boolean addResourceToTask(Task t, int units) {
