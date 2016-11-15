@@ -1,0 +1,2 @@
+#Lab 2 - Ross Freeman
+This Java program consists of 7 files with Lab2.java containing the main method. It should be compiled using "javac Lab2.java" and it can be run by using "java Lab2 inputFileLoc". It can optionally be run using the verbose flag by running "java Lab2 --verbose inputFileLoc". The inputs are expected to be in the same format as given online. In addition, a file called "random-numbers.txt" is expected to be located in the same directory in which you are running the program.
