@@ -7,7 +7,14 @@ public class Banker extends FIFO {
 
 
     public Banker() {
+        tasks = new ArrayList<>();
+        processQueue = new ArrayList<>();
 
+        for(Task task : Task.tasks) {
+            tasks.add(task.duplicate());
+        }
+
+        resources = Resource.duplicate();
     }
 
     public void run() {
@@ -24,11 +31,20 @@ public class Banker extends FIFO {
 
                     if (act.type == ActivityType.REQUEST) {
                         Resource resource = resources.get(act.resourceNum - 1);
+                        int claim = task.resourceClaim.get(resource);
+
+                        if(task.resourceHas.containsKey(resource)) {
+                            claim -= task.resourceHas.get(resource);
+                        }
+
                         if (!isSafe(task, resource, act.unitSize) ){
                             task.isBlocked = true;
                             task.blockCount++;
                             task.activities.add(task.cycleNum + 1, act);
-                        } else {
+                        } else if(act.unitSize > claim) {
+                            abortTask(task);
+                        }
+                        else {
                             resource.addResourceToTask(task, act.unitSize);
                             task.isBlocked = false;
                         }
@@ -42,9 +58,13 @@ public class Banker extends FIFO {
                         task.cycleNum++;
                     } else if(act.type == ActivityType.INITIATE) {
                         Resource r = resources.get(act.resourceNum-1);
-                        task.resourceClaim.put(r, act.unitSize);
-                        r.totalClaim += act.unitSize;
-                        task.cycleNum++;
+                        if(act.unitSize > r.totalUnits) {
+                            abortTask(task);
+                        } else {
+                            task.resourceClaim.put(r, act.unitSize);
+                            r.totalClaim += act.unitSize;
+                            task.cycleNum++;
+                        }
                     } else if(act.type == ActivityType.COMPUTE) {
                         if(task.computeTime == 0) {
                             task.computeTime = act.resourceNum;
@@ -86,13 +106,35 @@ public class Banker extends FIFO {
 
     public boolean isSafe(Task t, Resource r, int units) {
         for(Task task : tasks) {
-            int claim = task.resourceClaim.get(r);
-            if(r.unitsLeft - units >= claim) {
-                return true;
+            if (task.status == Status.RUNNING) {
+                int unitsNeeded = task.resourceClaim.get(r);
+
+                if (task.resourceHas.containsKey(r)) {
+                    unitsNeeded -= task.resourceHas.get(r);
+                }
+
+                if (task == t) {
+                    unitsNeeded -= units;
+                }
+
+                if (r.unitsLeft - units >= unitsNeeded) {
+                    return true;
+                }
             }
         }
 
         return false;
+    }
+
+    public void abortTask(Task t) {
+        t.status = Status.ABORTED;
+
+        for(Resource r : t.resourceHas.keySet()) {
+            r.removeResourceFromTask(t, -1);
+        }
+
+        processResources();
+
     }
 
     public void printDetails() {

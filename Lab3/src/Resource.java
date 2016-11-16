@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Resource {
     int unitsLeft;
     int resourceNum;
+    int totalUnits;
 
     int unitsToProcess;
     int totalClaim;
@@ -14,6 +15,7 @@ public class Resource {
 
     private Resource(int units) {
         unitsLeft = units;
+        totalUnits = units;
         unitsToProcess = 0;
         totalClaim = 0;
     }

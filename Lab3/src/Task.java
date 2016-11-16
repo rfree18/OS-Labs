@@ -19,6 +19,7 @@ public class Task {
     int computeTime;
 
     ArrayList<Activity> activities;
+    ArrayList<Activity> ogActivities;
     HashMap<Resource, Integer> resourceHas;
     HashMap<Resource, Integer> resourceNeeds;
     HashMap<Resource, Integer> resourceClaim;
@@ -30,6 +31,7 @@ public class Task {
         computeTime = 0;
 
         activities = new ArrayList<>();
+        ogActivities = new ArrayList<>();
         resourceHas = new HashMap<>();
         resourceNeeds = new HashMap<>();
         resourceClaim = new HashMap<>();
@@ -52,13 +54,18 @@ public class Task {
         }
 
         activities.add(act);
+        ogActivities.add(act);
     }
 
     Task duplicate() {
         Task t = new Task();
         t.cycleNum = 0;
         t.blockCount = 0;
-        t.activities = activities;
+
+        for(Activity act : ogActivities) {
+            t.activities.add(act);
+            t.ogActivities.add(act);
+        }
 
         return t;
     }
