@@ -1,12 +1,13 @@
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.io.File;
 
 /**
  * Created by rossfreeman on 11/4/16.
  */
 public class Lab3 {
     public static void main(String [] args) {
+        // Try opening and parsing through file
         try {
             Scanner inputScan = new Scanner(new File(args[0]));
 
@@ -33,6 +34,7 @@ public class Lab3 {
                 current.addActivity(actType, resourceNum, unitSize);
             }
 
+            // Run resource managers
             FIFO fifo = new FIFO();
             fifo.run();
 
