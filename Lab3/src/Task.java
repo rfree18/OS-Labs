@@ -43,9 +43,9 @@ public class Task {
 
     /**
      * Adds new activity to task with given parameters
-     * @param a - the tyoe if activity
-     * @param resourceNum - the identifying resource number
-     * @param units - the number of units of the specifed resource
+     * @param a the tyoe if activity
+     * @param resourceNum the identifying resource number
+     * @param units the number of units of the specifed resource
      */
     void addActivity(String a, int resourceNum, int units) {
         Activity act;

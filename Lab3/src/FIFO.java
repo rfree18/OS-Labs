@@ -168,7 +168,7 @@ public class FIFO {
 
     /**
      * Aborts the given task and returns resources to manager
-     * @param t - the task to be aborted
+     * @param t the task to be aborted
      */
     public void abortTask(Task t) {
         t.status = Status.ABORTED;

@@ -14,7 +14,7 @@ public class Resource {
 
     /**
      * Initizlies new resource
-     * @param units - total number of units for resource
+     * @param units total number of units for resource
      */
     private Resource(int units) {
         unitsLeft = units;
@@ -24,9 +24,9 @@ public class Resource {
 
     /**
      * Adds new units of a resource to a task if possible
-     * @param t - the task requesting the addition
-     * @param units - the number of units being requested
-     * @return - true if the request can be satisfied, false otherwise
+     * @param t the task requesting the addition
+     * @param units the number of units being requested
+     * @return true if the request can be satisfied, false otherwise
      */
     public boolean addResourceToTask(Task t, int units) {
         // Can't satisfy request if it is greater than remaining resources
@@ -51,8 +51,8 @@ public class Resource {
 
     /**
      * Remove resource from a task if possible
-     * @param t - task requesting release
-     * @param units - number of units to be released or -1 to release all resources
+     * @param t task requesting release
+     * @param units number of units to be released or -1 to release all resources
      * @return true if the request can be satisfied, false otherwise
      */
     public boolean removeResourceFromTask(Task t, int units) {
@@ -89,7 +89,7 @@ public class Resource {
 
     /**
      * Adds a new resource to the resource list
-     * @param units - total number of units for resource
+     * @param units total number of units for resource
      */
     static void addResource(int units) {
         if(resources == null) {
@@ -105,7 +105,7 @@ public class Resource {
 
     /**
      * Creates shallow duplicate of resource list to provide a clean copy of resources
-     * @return - ArrayList containing new copies of all resources
+     * @return ArrayList containing new copies of all resources
      */
     static ArrayList<Resource> duplicate() {
         ArrayList<Resource> dup = new ArrayList<>();

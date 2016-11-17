@@ -110,9 +110,9 @@ public class Banker extends FIFO {
 
     /**
      * Checks if a given request results in a safe state
-     * @param t - the task making the request
-     * @param r - the resource being requested
-     * @param units - the number of units being requested
+     * @param t the task making the request
+     * @param r the resource being requested
+     * @param units the number of units being requested
      * @return true if the state is safe, false otherwise
      */
     public boolean isSafe(Task t, Resource r, int units) {
@@ -200,8 +200,8 @@ public class Banker extends FIFO {
     }
 
     /**
-     * Prioerly aborts a specified task and returns its resources to the manager
-     * @param t - the task to be aborted
+     * Properly aborts a specified task and returns its resources to the manager
+     * @param t the task to be aborted
      */
     public void abortTask(Task t) {
         t.status = Status.ABORTED;
