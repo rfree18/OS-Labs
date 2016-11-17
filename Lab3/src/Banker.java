@@ -115,7 +115,7 @@ public class Banker extends FIFO {
      * @param units the number of units being requested
      * @return true if the state is safe, false otherwise
      */
-    public boolean isSafe(Task t, Resource r, int units) {
+    private boolean isSafe(Task t, Resource r, int units) {
         boolean [] didComplete = new boolean[tasks.size()];
         HashMap<Resource, Integer> simResources = new HashMap<>();
 
@@ -190,9 +190,9 @@ public class Banker extends FIFO {
             }
         }
 
-        for(int i = 0; i < didComplete.length; i++) {
+        for(boolean completion : didComplete) {
             // If a process could not complete, the state is unsafe
-            if(!didComplete[i]) {
+            if(!completion) {
                 return false;
             }
         }

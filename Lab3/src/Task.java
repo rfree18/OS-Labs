@@ -27,7 +27,7 @@ public class Task {
     /**
      * Initializes tasks and its variables
      */
-    private Task() {;
+    private Task() {
         cycleNum = 0;
         isBlocked = false;
         blockCount = 0;
