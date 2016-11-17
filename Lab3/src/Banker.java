@@ -55,6 +55,9 @@ public class Banker extends FIFO {
                         } else if (act.unitSize > claim) {
                             // Abort task if its request is greater than its claim
                             abortTask(task);
+                            System.out.println("During cycle " + task.cycleNum + "-" + (task.cycleNum + 1) + " of Banker's algorithm");
+                            int taskNum = tasks.indexOf(task) + 1;
+                            System.out.println("\t Task " + taskNum + "'s request exceeds claim; aborted\n");
                         } else {
                             // Safely add resource to task
                             resource.addResourceToTask(task, act.unitSize);
@@ -73,6 +76,10 @@ public class Banker extends FIFO {
                         // If claim is more than number of resources, then abort
                         if (act.unitSize > r.totalUnits) {
                             abortTask(task);
+
+                            int taskNum = tasks.indexOf(task) + 1;
+                            System.out.println("Banker aborts task " + taskNum + " before run begins:");
+                            System.out.println("\t Claim for resource " + (r.resourceNum + 1) + " ("+ act.unitSize + ") exceeds number of units present (" + r.totalUnits + ")\n");
                         } else {
                             // Add claim to task
                             task.resourceClaim.put(r, act.unitSize);
@@ -181,7 +188,7 @@ public class Banker extends FIFO {
 
                     current += toAdd;
 
-                    simResources.replace(resource, current);
+                    simResources.put(resource, current);
                 }
 
                 didComplete[i] = true;
