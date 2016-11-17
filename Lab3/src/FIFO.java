@@ -8,10 +8,14 @@ public class FIFO {
     ArrayList<Task> processQueue;
     ArrayList<Resource> resources;
 
+    /**
+     * Initializes a FIFO object to run and initializes needed variables
+     */
     public FIFO() {
         tasks = new ArrayList<>();
         processQueue = new ArrayList<>();
 
+        // Duplicate tasks and resources so they can be reused later
         for(Task task : Task.tasks) {
             tasks.add(task.duplicate());
         }
@@ -19,6 +23,10 @@ public class FIFO {
         resources = Resource.duplicate();
     }
 
+    /**
+     * Checks to make sure that there is still a task running
+     * @return true if there is a task running, false otherwise
+     */
     public boolean hasTasks() {
         for(Task task : tasks) {
             if(task.status == Status.RUNNING) {
@@ -29,6 +37,9 @@ public class FIFO {
         return false;
     }
 
+    /**
+     * Main run function. Loops until all tasks are aborted or terminated
+     */
     public void run() {
         while(hasTasks()) {
             for(Task task : tasks) {

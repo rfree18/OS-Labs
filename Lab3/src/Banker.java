@@ -164,7 +164,7 @@ public class Banker extends FIFO {
                 }
 
                 didComplete[i] = true;
-                i--;
+                i = -1;
             }
         }
 
