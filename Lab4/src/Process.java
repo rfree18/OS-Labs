@@ -57,7 +57,7 @@ public class Process {
         frame.evictFrame();
         frame = null;
 
-        return frame;
+        return result;
     }
 
     public int mod(int a, int b) {
