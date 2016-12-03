@@ -1,2 +1,2 @@
 #Lab 4 - Ross Freeman
-
+This project consists of 5 files, with the main method located in Paging.java. The project can be compiled using "javac Paging.java". To run the program, type "java Paging M P S J N R" where M is an integer representing the machine size, P is an integer representing the process size, J is an integer 1-4 representing the job size, N is an integer representing the number of references for each process, and R is a string indicating one of the following replacement algorithms: lifo, lru, and random. All values must be input and valid for the program to run correctly. In addition, a file containing random integers called "random-numbers.txt" must be located in the same directory as the program.
