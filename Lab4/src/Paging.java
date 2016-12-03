@@ -25,6 +25,13 @@ public class Paging {
         numReferences = Integer.parseInt(args[4]);
         String r = args[5];
 
+        System.out.println("The machine size is " + machineSize);
+        System.out.println("The page size is " + pageSize);
+        System.out.println("The process size is " + Process.size);
+        System.out.println("The job mix number is " + j);
+        System.out.println("The number of references per process is " + numReferences);
+        System.out.println("The replacement algorithm is " + r + "\n");
+
         if(r.equals("lru"))
             algoType = Algo.LRU;
         else if(r.equals("lifo"))
@@ -208,7 +215,7 @@ public class Paging {
                 System.out.println("\tAverage Residency: " + avgResidency);
             }
         }
-        System.out.println("Total Faults: " + totalFaults);
+        System.out.println("\nTotal Faults: " + totalFaults);
         double totalAvgResidency = residencyCount / processCount;
         System.out.println("Total Average Residency: " + totalAvgResidency);
     }
