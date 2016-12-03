@@ -88,7 +88,6 @@ public class Paging {
 
         while(!isComplete()) {
             for(Process process : Process.processes) {
-                int nextAddr = process.addr;
                 for(int i = 0; i < q; i++) {
                     if(process.numReferences == numReferences) {
                         break;
@@ -105,7 +104,7 @@ public class Paging {
                     }
                     Process.increaseResidencies();
                     process.numReferences++;
-                    nextAddr = process.getNextWord();
+                    process.getNextWord();
                 }
             }
         }

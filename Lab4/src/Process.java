@@ -33,7 +33,7 @@ public class Process {
         addr = (111 * pid) % size;
     }
 
-    public int getNextWord() {
+    public void getNextWord() {
         double r = RandomGen.getNextInt();
         double result = r/(Integer.MAX_VALUE + 1d);
 
@@ -47,8 +47,6 @@ public class Process {
             int offset = RandomGen.getNextInt();
             addr = mod(offset, size);
         }
-
-        return addr;
     }
 
     public Page getPage() {
