@@ -117,9 +117,9 @@ public class Paging {
                 return lruEvict();
             case LIFO:
                 return lifoEvict();
+            default:
+                return randomEvict();
         }
-
-        return null;
     }
 
     public static Frame lruEvict() {
@@ -150,6 +150,37 @@ public class Paging {
         }
 
         frames.add(next);
+
+        return next;
+    }
+
+    public static Frame randomEvict() {
+        Frame next = null;
+
+        for(int i = 0; i < frames.size(); i++) {
+            if(frames.get(i).page == null) {
+                next = frames.get(i);
+                break;
+            }
+        }
+        if(next == null) {
+            int rand = RandomGen.getNextInt();
+            int numFrames = frames.size();
+
+            int frameId = rand % numFrames;
+            for (Frame f : frames) {
+                if (f.id == frameId) {
+                    next = f;
+                }
+            }
+        }
+
+//        if(next == null) {
+//            next = frames.remove(frames.size() - 1);
+//        }
+        if(next.page != null) {
+            next.evictFrame();
+        }
 
         return next;
     }
