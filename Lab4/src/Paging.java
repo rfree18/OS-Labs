@@ -3,10 +3,15 @@ import java.util.ArrayList;
 /**
  * Created by rossfreeman on 11/21/16.
  */
+
+enum Algo {
+    LRU, LIFO, RANDOM;
+}
 public class Paging {
     static int numReferences;
     static int q = 3;
     static ArrayList<Frame> frames = new ArrayList<>();
+    static Algo algoType;
 
     public static void main(String [] args) {
         if(args.length < 6) {
@@ -19,6 +24,13 @@ public class Paging {
         int j = Integer.parseInt(args[3]);
         numReferences = Integer.parseInt(args[4]);
         String r = args[5];
+
+        if(r.equals("lru"))
+            algoType = Algo.LRU;
+        else if(r.equals("lifo"))
+            algoType = Algo.LIFO;
+        else
+            algoType = Algo.RANDOM;
 
         switch (j) {
             case 1:
@@ -83,11 +95,11 @@ public class Paging {
                     }
                     Page currentPage = process.getPage();
                     if(currentPage.frame == null) {
-                        currentPage.frame = lruEvict();
+                        currentPage.frame = evict();
                         currentPage.frame.page = currentPage;
                         process.faults++;
                     }
-                    else {
+                    else if(algoType == Algo.LRU) {
                         frames.remove(currentPage.frame);
                         frames.add(currentPage.frame);
                     }
@@ -99,9 +111,40 @@ public class Paging {
         }
     }
 
+    public static Frame evict() {
+        switch (algoType) {
+            case LRU:
+                return lruEvict();
+            case LIFO:
+                return lifoEvict();
+        }
+
+        return null;
+    }
+
     public static Frame lruEvict() {
         Frame next = frames.remove(0);
 
+        if(next.page != null) {
+            next.evictFrame();
+        }
+
+        frames.add(next);
+
+        return next;
+    }
+
+    public static Frame lifoEvict() {
+        Frame next = null;
+        for(int i = frames.size() - 1; i >= 0; i--) {
+            if(frames.get(i).page == null) {
+                next = frames.remove(i);
+                break;
+            }
+        }
+        if(next == null) {
+            next = frames.remove(frames.size() - 1);
+        }
         if(next.page != null) {
             next.evictFrame();
         }
