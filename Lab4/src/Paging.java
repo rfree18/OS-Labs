@@ -191,6 +191,8 @@ public class Paging {
 
     public static void printDetails() {
         int totalFaults = 0;
+        double residencyCount = 0;
+        int processCount = 0;
 
         for(Process p : Process.processes) {
             totalFaults += p.faults;
@@ -201,9 +203,13 @@ public class Paging {
             }
             else {
                 double avgResidency = (double)p.residency / p.evictionCount;
+                residencyCount += avgResidency;
+                processCount++;
                 System.out.println("\tAverage Residency: " + avgResidency);
             }
         }
         System.out.println("Total Faults: " + totalFaults);
+        double totalAvgResidency = residencyCount / processCount;
+        System.out.println("Total Average Residency: " + totalAvgResidency);
     }
 }
