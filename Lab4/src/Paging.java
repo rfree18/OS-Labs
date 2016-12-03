@@ -61,6 +61,7 @@ public class Paging {
         }
 
         lifo();
+        printDetails();
     }
 
     public static void lifo() {
@@ -74,9 +75,12 @@ public class Paging {
             for(Process process : Process.processes) {
                 int nextAddr = process.addr;
                 for(int i = 0; i < q; i++) {
+                    if(process.numReferences == numReferences) {
+                        break;
+                    }
                     if(process.frame != null) {
                         if(process.frame.max >= nextAddr && process.frame.min <= nextAddr) {
-                            process.numReferences++;
+                            process.increaseResidency();
                         }
                         else {
                             stack.add(0, process.removeFrame());
@@ -88,7 +92,7 @@ public class Paging {
                         process.assignToFrame(f);
                         process.faults++;
                     }
-
+                    process.numReferences++;
                     nextAddr = process.getNextWord();
                 }
             }
@@ -102,5 +106,12 @@ public class Paging {
         }
 
         return true;
+    }
+
+    public static void printDetails() {
+        for(Process p : Process.processes) {
+            System.out.println(p.residency);
+            System.out.println(p.faults);
+        }
     }
 }

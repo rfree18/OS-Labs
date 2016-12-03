@@ -8,6 +8,7 @@ public class Process {
     double b;
     double c;
     int numReferences;
+    int residency;
     int pid;
     int addr;
     Frame frame;
@@ -21,6 +22,7 @@ public class Process {
         this.a = a;
         this.b = b;
         this.c = c;
+        residency = 0;
 
         numReferences = 0;
         addr = (111 * pid) % size;
@@ -47,12 +49,18 @@ public class Process {
     public void assignToFrame(Frame f) {
         frame = f;
         f.p = this;
-        f.min = addr;
-        f.max = addr + size;
+        f.min = addr - (addr % 10);
+        f.max = f.min + f.size - 1;
+        f.residency = 1;
+    }
+
+    public void increaseResidency() {
+        frame.residency++;
     }
 
     public Frame removeFrame() {
         Frame result = frame;
+        residency += frame.residency;
 
         frame.evictFrame();
         frame = null;

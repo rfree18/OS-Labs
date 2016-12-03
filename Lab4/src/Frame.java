@@ -11,6 +11,8 @@ public class Frame {
     int min;
     int max;
 
+    int residency = 0;
+
     static ArrayList<Frame> frames = new ArrayList<>();
 
     public Frame(int id, int size) {
