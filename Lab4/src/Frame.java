@@ -9,8 +9,6 @@ public class Frame {
     int size;
     Page page;
 
-    int residency = 0;
-
     static ArrayList<Frame> frames = new ArrayList<>();
 
     public Frame(int id, int size) {

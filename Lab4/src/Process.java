@@ -11,7 +11,6 @@ public class Process {
     int residency;
     int pid;
     int addr;
-    Frame frame;
     int faults = 0;
 
     int evictionCount = 0;
@@ -60,20 +59,6 @@ public class Process {
         }
 
         return null;
-    }
-
-    public void increaseResidency() {
-        frame.residency++;
-    }
-
-    public Frame removeFrame() {
-        Frame result = frame;
-        residency += frame.residency;
-
-        frame.evictFrame();
-        frame = null;
-
-        return result;
     }
 
     public static void increaseResidencies() {

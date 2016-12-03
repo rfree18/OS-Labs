@@ -174,10 +174,6 @@ public class Paging {
                 }
             }
         }
-
-//        if(next == null) {
-//            next = frames.remove(frames.size() - 1);
-//        }
         if(next.page != null) {
             next.evictFrame();
         }
