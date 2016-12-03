@@ -7,9 +7,7 @@ public class Frame {
 
     int id;
     int size;
-    Process p;
-    int min;
-    int max;
+    Page page;
 
     int residency = 0;
 
@@ -21,8 +19,10 @@ public class Frame {
     }
 
     public void evictFrame() {
-        this.p = null;
-        this.min = 0;
-        this.max = 0;
+        page.process.residency += page.residency;
+        page.process.evictionCount++;
+        page.residency = 0;
+        page.frame = null;
+        page = null;
     }
 }

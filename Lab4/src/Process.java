@@ -14,6 +14,10 @@ public class Process {
     Frame frame;
     int faults = 0;
 
+    int evictionCount = 0;
+
+    ArrayList<Page> pages;
+
     static ArrayList<Process> processes = new ArrayList<>();
     static int size = 0;
 
@@ -23,6 +27,8 @@ public class Process {
         this.b = b;
         this.c = c;
         residency = 0;
+
+        pages = new ArrayList<>();
 
         numReferences = 0;
         addr = (111 * pid) % size;
@@ -46,12 +52,14 @@ public class Process {
         return addr;
     }
 
-    public void assignToFrame(Frame f) {
-        frame = f;
-        f.p = this;
-        f.min = addr - (addr % 10);
-        f.max = f.min + f.size - 1;
-        f.residency = 1;
+    public Page getPage() {
+        for(Page p : pages) {
+            if(addr >= p.min && addr <= p.max) {
+                return p;
+            }
+        }
+
+        return null;
     }
 
     public void increaseResidency() {
@@ -66,6 +74,16 @@ public class Process {
         frame = null;
 
         return result;
+    }
+
+    public static void increaseResidencies() {
+        for(Process process : processes) {
+            for(Page page : process.pages) {
+                if(page.frame != null) {
+                    page.residency++;
+                }
+            }
+        }
     }
 
     public int mod(int a, int b) {

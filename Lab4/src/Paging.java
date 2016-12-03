@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Created by rossfreeman on 11/21/16.
@@ -9,6 +6,7 @@ import java.util.Scanner;
 public class Paging {
     static int numReferences;
     static int q = 3;
+    static ArrayList<Frame> frames = new ArrayList<>();
 
     public static void main(String [] args) {
         if(args.length < 6) {
@@ -17,12 +15,10 @@ public class Paging {
         }
         int machineSize = Integer.parseInt(args[0]);
         int pageSize = Integer.parseInt(args[1]);
-        int s = Integer.parseInt(args[2]);
+        Process.size = Integer.parseInt(args[2]);
         int j = Integer.parseInt(args[3]);
         numReferences = Integer.parseInt(args[4]);
         String r = args[5];
-
-        Process.size = s;
 
         switch (j) {
             case 1:
@@ -60,15 +56,22 @@ public class Paging {
             Frame.frames.add(new Frame(i, pageSize));
         }
 
-        lifo();
+        int numPages = Process.size / pageSize;
+        for(Process p : Process.processes) {
+            for(int i = 0; i < numPages; i++) {
+                int min = i * pageSize;
+                int max = min + pageSize - 1;
+                p.pages.add(new Page(min, max, i, p));
+            }
+        }
+
+        run();
         printDetails();
     }
 
-    public static void lifo() {
-        ArrayList<Frame> stack = new ArrayList<>();
-
+    public static void run() {
         for(int i = Frame.frames.size() -1; i >= 0; i--) {
-            stack.add(Frame.frames.get(i));
+            frames.add(Frame.frames.get(i));
         }
 
         while(!isComplete()) {
@@ -78,25 +81,34 @@ public class Paging {
                     if(process.numReferences == numReferences) {
                         break;
                     }
-                    if(process.frame != null) {
-                        if(process.frame.max >= nextAddr && process.frame.min <= nextAddr) {
-                            process.increaseResidency();
-                        }
-                        else {
-                            stack.add(0, process.removeFrame());
-                            process.faults++;
-                        }
-                    }
-                    else {
-                        Frame f = stack.get(0);
-                        process.assignToFrame(f);
+                    Page currentPage = process.getPage();
+                    if(currentPage.frame == null) {
+                        currentPage.frame = lruEvict();
+                        currentPage.frame.page = currentPage;
                         process.faults++;
                     }
+                    else {
+                        frames.remove(currentPage.frame);
+                        frames.add(currentPage.frame);
+                    }
+                    Process.increaseResidencies();
                     process.numReferences++;
                     nextAddr = process.getNextWord();
                 }
             }
         }
+    }
+
+    public static Frame lruEvict() {
+        Frame next = frames.remove(0);
+
+        if(next.page != null) {
+            next.evictFrame();
+        }
+
+        frames.add(next);
+
+        return next;
     }
 
     public static boolean isComplete() {
@@ -109,9 +121,20 @@ public class Paging {
     }
 
     public static void printDetails() {
+        int totalFaults = 0;
+
         for(Process p : Process.processes) {
-            System.out.println(p.residency);
-            System.out.println(p.faults);
+            totalFaults += p.faults;
+            System.out.println("Process " + p.pid + ": ");
+            System.out.println("\tFaults: " + p.faults);
+            if(p.evictionCount == 0) {
+                System.out.println("\tAverage Residency: Undefined");
+            }
+            else {
+                double avgResidency = (double)p.residency / p.evictionCount;
+                System.out.println("\tAverage Residency: " + avgResidency);
+            }
         }
+        System.out.println("Total Faults: " + totalFaults);
     }
 }
