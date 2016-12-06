@@ -3,14 +3,14 @@ import java.util.ArrayList;
 /**
  * Created by rossfreeman on 11/28/16.
  */
-public class Process {
-    double a;
-    double b;
-    double c;
+class Process {
+    private double a;
+    private double b;
+    private double c;
     int numReferences;
     int residency;
     int pid;
-    int addr;
+    private int addr;
     int faults = 0;
 
     int evictionCount = 0;
@@ -20,7 +20,7 @@ public class Process {
     static ArrayList<Process> processes = new ArrayList<>();
     static int size = 0;
 
-    public Process(int pid, double a, double b, double c) {
+    Process(int pid, double a, double b, double c) {
         this.pid = pid;
         this.a = a;
         this.b = b;
@@ -33,7 +33,7 @@ public class Process {
         addr = (111 * pid) % size;
     }
 
-    public void getNextWord() {
+    void getNextWord() {
         double r = RandomGen.getNextInt();
         double result = r/(Integer.MAX_VALUE + 1d);
 
@@ -49,7 +49,7 @@ public class Process {
         }
     }
 
-    public Page getPage() {
+    Page getPage() {
         for(Page p : pages) {
             if(addr >= p.min && addr <= p.max) {
                 return p;
@@ -59,7 +59,7 @@ public class Process {
         return null;
     }
 
-    public static void increaseResidencies() {
+    static void increaseResidencies() {
         for(Process process : processes) {
             for(Page page : process.pages) {
                 if(page.frame != null) {
@@ -69,7 +69,7 @@ public class Process {
         }
     }
 
-    public int mod(int a, int b) {
+    private int mod(int a, int b) {
         return (a+b)%b;
     }
 }

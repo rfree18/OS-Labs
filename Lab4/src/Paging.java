@@ -5,13 +5,12 @@ import java.util.ArrayList;
  */
 
 enum Algo {
-    LRU, LIFO, RANDOM;
+    LRU, LIFO, RANDOM
 }
 public class Paging {
-    static int numReferences;
-    static int q = 3;
-    static ArrayList<Frame> frames = new ArrayList<>();
-    static Algo algoType;
+    private static int numReferences;
+    private static ArrayList<Frame> frames = new ArrayList<>();
+    private static Algo algoType;
 
     public static void main(String [] args) {
         if(args.length < 6) {
@@ -32,12 +31,17 @@ public class Paging {
         System.out.println("The number of references per process is " + numReferences);
         System.out.println("The replacement algorithm is " + r + "\n");
 
-        if(r.equals("lru"))
-            algoType = Algo.LRU;
-        else if(r.equals("lifo"))
-            algoType = Algo.LIFO;
-        else
-            algoType = Algo.RANDOM;
+        switch (r) {
+            case "lru":
+                algoType = Algo.LRU;
+                break;
+            case "lifo":
+                algoType = Algo.LIFO;
+                break;
+            default:
+                algoType = Algo.RANDOM;
+                break;
+        }
 
         switch (j) {
             case 1:
@@ -72,7 +76,7 @@ public class Paging {
         int numFrames = machineSize / pageSize;
 
         for(int i = 0; i < numFrames; i++) {
-            Frame.frames.add(new Frame(i, pageSize));
+            Frame.frames.add(new Frame(i));
         }
 
         int numPages = Process.size / pageSize;
@@ -80,7 +84,7 @@ public class Paging {
             for(int i = 0; i < numPages; i++) {
                 int min = i * pageSize;
                 int max = min + pageSize - 1;
-                p.pages.add(new Page(min, max, i, p));
+                p.pages.add(new Page(min, max, p));
             }
         }
 
@@ -88,13 +92,14 @@ public class Paging {
         printDetails();
     }
 
-    public static void run() {
+    private static void run() {
         for(int i = Frame.frames.size() -1; i >= 0; i--) {
             frames.add(Frame.frames.get(i));
         }
 
         while(!isComplete()) {
             for(Process process : Process.processes) {
+                int q = 3;
                 for(int i = 0; i < q; i++) {
                     if(process.numReferences == numReferences) {
                         break;
@@ -117,7 +122,7 @@ public class Paging {
         }
     }
 
-    public static Frame evict() {
+    private static Frame evict() {
         switch (algoType) {
             case LRU:
                 return lruEvict();
@@ -128,7 +133,7 @@ public class Paging {
         }
     }
 
-    public static Frame lruEvict() {
+    private static Frame lruEvict() {
         Frame next = frames.remove(0);
 
         if(next.page != null) {
@@ -140,7 +145,7 @@ public class Paging {
         return next;
     }
 
-    public static Frame lifoEvict() {
+    private static Frame lifoEvict() {
         Frame next = null;
         for(int i = frames.size() - 1; i >= 0; i--) {
             if(frames.get(i).page == null) {
@@ -160,12 +165,12 @@ public class Paging {
         return next;
     }
 
-    public static Frame randomEvict() {
+    private static Frame randomEvict() {
         Frame next = null;
 
-        for(int i = 0; i < frames.size(); i++) {
-            if(frames.get(i).page == null) {
-                next = frames.get(i);
+        for(Frame frame : frames) {
+            if(frame.page == null) {
+                next = frame;
                 break;
             }
         }
@@ -180,6 +185,7 @@ public class Paging {
                 }
             }
         }
+        if (next == null) throw new AssertionError();
         if(next.page != null) {
             next.evictFrame();
         }
@@ -187,7 +193,7 @@ public class Paging {
         return next;
     }
 
-    public static boolean isComplete() {
+    private static boolean isComplete() {
         for(Process p : Process.processes) {
             if(p.numReferences < numReferences)
                 return false;
@@ -196,7 +202,7 @@ public class Paging {
         return true;
     }
 
-    public static void printDetails() {
+    private static void printDetails() {
         int totalFaults = 0;
         double residencyCount = 0;
         int evictionCount = 0;

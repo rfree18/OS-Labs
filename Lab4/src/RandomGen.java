@@ -5,11 +5,11 @@ import java.util.Scanner;
 /**
  * Created by rossfreeman on 12/1/16.
  */
-public class RandomGen {
+class RandomGen {
 
-    Scanner randGen;
+    private Scanner randGen;
 
-    static RandomGen generator;
+    private static RandomGen generator;
 
     private RandomGen() {
         try {
@@ -19,10 +19,8 @@ public class RandomGen {
         }
     }
 
-    public static int getNextInt() {
-        if(generator == null) {
-            generator = new RandomGen();
-        }
+    static int getNextInt() {
+        if(generator == null) generator = new RandomGen();
 
         return generator.randGen.nextInt();
     }

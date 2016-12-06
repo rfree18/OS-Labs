@@ -3,20 +3,18 @@ import java.util.ArrayList;
 /**
  * Created by rossfreeman on 11/29/16.
  */
-public class Frame {
+class Frame {
 
     int id;
-    int size;
     Page page;
 
     static ArrayList<Frame> frames = new ArrayList<>();
 
-    public Frame(int id, int size) {
+    Frame(int id) {
         this.id = id;
-        this.size = size;
     }
 
-    public void evictFrame() {
+    void evictFrame() {
         page.process.residency += page.residency;
         page.process.evictionCount++;
         page.residency = 0;

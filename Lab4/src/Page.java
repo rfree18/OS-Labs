@@ -1,10 +1,9 @@
 /**
  * Created by rossfreeman on 12/3/16.
  */
-public class Page {
+class Page {
     int min;
     int max;
-    int id;
 
     Process process;
 
@@ -12,10 +11,9 @@ public class Page {
 
     int residency = 0;
 
-    public Page(int min, int max, int id, Process p) {
+    Page(int min, int max, Process p) {
         this.min = min;
         this.max = max;
-        this.id = id;
         process = p;
     }
 }
